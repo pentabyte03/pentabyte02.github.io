@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" class="light dark">
+
+<head>
+
+ <meta charset="UTF-8">
+ <title>Select - PWA con Formulario</title>
+
+ <script type="module" src="js/lib/registraServiceWorker.js"></script>
+ <script type="module" src="js/lib/manejaErrores.js"></script>
+
+ <meta name="viewport" content="width=device-width">
+ <meta name="theme-color" content="#fffbfe">
+ <link rel="icon" sizes="32x32" href="favicon.ico">
+ <link rel="manifest" href="site.webmanifest">
+ <script src="ungap/custom-elements.js"></script>
+
+ <script type="module" src="js/lib/custom/md-app-bar.js"></script>
+ <script type="module" src="js/lib/custom/md-select-menu.js"></script>
+ <script type="module" src="js/lib/custom/md-options-menu.js"></script>
+ <script type="module" src="js/nav-tab-fixed.js"></script>
+
+ <link rel="stylesheet" href="css/estilos.css">
+ <link rel="stylesheet" href="css/transicion_pestanas.css">
+ <link rel="stylesheet" href="css/md-tab.css">
+ <link rel="stylesheet" href="css/md-menu.css">
+ <link rel="stylesheet" href="css/material-symbols-outlined.css">
+ <link rel="stylesheet" href="css/md-filled-text-field.css">
+ <link rel="stylesheet" href="css/md-filled-button.css">
+
+</head>
+
+<body>
+
+ <form>
+
+  <md-app-bar adicional="tab">
+
+   <h1>Select</h1>
+
+  </md-app-bar>
+
+  <nav-tab-fixed id="tab"></nav-tab-fixed>
+
+  <section>
+
+   <p>
+    <span id="etiquetaGrupo" class="md-filled-text-field" accesskey="G">
+     <md-select-menu name="grupo" required value="IC21"
+      aria-labelledby="etiquetaGrupo"
+      options="opcionesDeGrupo"></md-select-menu>
+     <span>Grupo *</span>
+     <small>Obligatorio</small>
+    </span>
+   </p>
+
+   <p>
+    <button class="md-filled-button" style="width: 100%;">Enviar</button>
+   </p>
+
+  </section>
+
+  <md-options-menu id="opcionesDeGrupo" aria-label="Opciones de grupo">
+   <span data-value="" title="Selecciona opción"></span>
+   <span data-value="IC21">IC-21</span>
+   <span data-value="IC22">IC-22</span>
+   <span data-value="IC23">IC-23</span>
+  </md-options-menu>
+
+ </form>
+
+</body>
+
+</html>

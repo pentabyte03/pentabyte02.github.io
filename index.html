@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es" class="light dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Notificaciones Push</title>
+
+    <meta name="theme-color" content="#fffbfe" />
+    <link rel="icon" sizes="32x32" href="favicon.ico" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <!-- scripts del primer index -->
+    <script type="module" src="js/lib/registraServiceWorker.js"></script>
+    <script type="module" src="js/lib/manejaErrores.js"></script>
+
+    <script src="ungap/custom-elements.js"></script>
+
+    <script type="module" src="js/lib/custom/md-app-bar.js"></script>
+    <script type="module" src="js/nav-tab-fixed.js"></script>
+
+    <!-- estilos del primer index -->
+    <link rel="stylesheet" href="css/estilos.css" />
+    <link rel="stylesheet" href="css/transicion_pestanas.css" />
+    <link rel="stylesheet" href="css/md-tab.css" />
+    <link rel="stylesheet" href="css/material-symbols-outlined.css" />
+    <link rel="stylesheet" href="css/md-filled-text-field.css" />
+    <link rel="stylesheet" href="css/md-filled-button.css" />
+    <link rel="stylesheet" href="css/md-outline-button.css" />
+  </head>
+
+  <body>
+    <md-app-bar class="centered">
+      <h1>Notificaciones Push</h1>
+    </md-app-bar>
+
+    <section style="padding: 20px">
+      <menu
+        style="
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          list-style: none;
+          padding: 0;
+        "
+      >
+        <li>
+          <button id="btnSuscribe" class="md-filled-button" hidden>
+            Suscribirse
+          </button>
+        </li>
+
+        <li>
+          <button id="btnCancela" class="md-outline-button" hidden>
+            Cancelar suscripción
+          </button>
+        </li>
+
+        <li>
+          <button id="btnNotifica" class="md-filled-button" hidden>
+            Enviar notificación
+          </button>
+        </li>
+
+        <li>
+          <a href="php/genera-llaves.php" target="_blank">
+            <button class="md-outline-button">Generar llaves</button>
+          </a>
+        </li>
+      </menu>
+
+      <p>
+        <output id="outEstado">
+          <progress max="100">Cargando…</progress>
+        </output>
+      </p>
+
+      <fieldset>
+        <legend>Reporte de envío</legend>
+        <dl id="reporte"></dl>
+      </fieldset>
+    </section>
+
+    <script type="module">
+      import { activaNotificacionesPush } from "./js/lib/activaNotificacionesPush.js";
+      import { getSuscripcionPush } from "./js/lib/getSuscripcionPush.js";
+      import { suscribeAPush } from "./js/lib/suscribeAPush.js";
+      import { cancelaSuscripcionPush } from "./js/lib/cancelaSuscripcionPush.js";
+      import { urlBase64ToUint8Array } from "./js/lib/urlBase64ToUint8Array.js";
+      import { calculaDtoParaSuscripcion } from "./js/lib/calculaDtoParaSuscripcion.js";
+      import { consume } from "./js/lib/consume.js";
+      import { enviaJsonRecibeJson } from "./js/lib/enviaJsonRecibeJson.js";
+      import { descargaVista } from "./js/lib/descargaVista.js";
+      import { muestraError } from "./js/lib/muestraError.js";
+
+      const applicationServerKey = urlBase64ToUint8Array(
+        "BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0",
+      );
+
+      const Estado = {
+        CALCULANDO: "Calculando…",
+        SUSCRITO: "Suscrito",
+        DESUSCRITO: "Sin suscripción",
+        INCOMPATIBLE: "Incompatible",
+      };
+
+      preparaVista();
+
+      btnSuscribe.addEventListener("click", suscribe);
+      btnCancela.addEventListener("click", cancela);
+      btnNotifica.addEventListener("click", notificaDesdeElServidor);
+
+      async function preparaVista() {
+        try {
+          await activaNotificacionesPush("sw.js");
+
+          const suscripcion = await getSuscripcionPush();
+
+          if (suscripcion === null) {
+            muestraEstado(Estado.DESUSCRITO);
+          } else {
+            const dto = calculaDtoParaSuscripcion(suscripcion);
+
+            await consume(
+              enviaJsonRecibeJson("php/suscripcion-modifica.php", dto),
+            );
+
+            muestraEstado(Estado.SUSCRITO);
+          }
+        } catch (error) {
+          muestraEstado(Estado.INCOMPATIBLE);
+          muestraError(error);
+        }
+      }
+
+      async function notificaDesdeElServidor() {
+        reporte.innerHTML = `<progress max="100">Cargando…</progress>`;
+
+        await descargaVista("php/notifica.php", "POST");
+      }
+
+      async function suscribe() {
+        muestraEstado(Estado.CALCULANDO);
+
+        const suscripcion = await suscribeAPush(applicationServerKey);
+
+        const dto = calculaDtoParaSuscripcion(suscripcion);
+
+        await consume(enviaJsonRecibeJson("php/suscripcion-modifica.php", dto));
+
+        muestraEstado(Estado.SUSCRITO);
+      }
+
+      async function cancela() {
+        muestraEstado(Estado.CALCULANDO);
+
+        const suscripcion = await cancelaSuscripcionPush();
+
+        if (suscripcion !== null) {
+          const dto = calculaDtoParaSuscripcion(suscripcion);
+
+          await consume(
+            enviaJsonRecibeJson("php/suscripcion-elimina.php", dto),
+          );
+
+          muestraEstado(Estado.DESUSCRITO);
+        }
+      }
+
+      function muestraEstado(estado) {
+        outEstado.value = estado;
+
+        if (estado === Estado.INCOMPATIBLE || estado === Estado.CALCULANDO) {
+          btnSuscribe.hidden = true;
+          btnCancela.hidden = true;
+          btnNotifica.hidden = true;
+        } else if (estado === Estado.SUSCRITO) {
+          btnSuscribe.hidden = true;
+          btnCancela.hidden = false;
+          btnNotifica.hidden = false;
+        } else if (estado === Estado.DESUSCRITO) {
+          btnSuscribe.hidden = false;
+          btnCancela.hidden = true;
+          btnNotifica.hidden = true;
+        }
+      }
+    </script>
+  </body>
+</html>

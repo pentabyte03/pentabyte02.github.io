@@ -1,0 +1,133 @@
+{
+ "short_name": "Formulario PWA",
+ "name": "PWA con Formulario",
+ "id": "/index.html",
+ "start_url": "/index.html",
+ "display": "standalone",
+ "theme_color": "#fffbfe",
+ "background_color": "#fffbfe",
+ "display_override": [
+  "window-controls-overlay"
+ ],
+ "description": "PWA con componentes de Material Design.",
+ "screenshots": [
+  {
+   "src": "/img/screenshot_horizontal.png",
+   "sizes": "760x384",
+   "type": "image/png",
+   "form_factor": "wide",
+   "label": "PWA con Material Design"
+  },
+  {
+   "src": "/img/screenshot_vertical.png",
+   "sizes": "557x759",
+   "type": "image/png",
+   "form_factor": "narrow",
+   "label": "PWA con Material Design (2)"
+  }
+ ],
+ "icons": [
+  {
+    "purpose": "maskable",
+    "sizes": "2730x2730",
+    "src": "img/maskable_icon.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "48x48",
+    "src": "img/maskable_icon_x48.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "72x72",
+    "src": "img/maskable_icon_x72.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "96x96",
+    "src": "img/maskable_icon_x96.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "128x128",
+    "src": "img/maskable_icon_x128.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "192x192",
+    "src": "img/maskable_icon_x192.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "384x384",
+    "src": "img/maskable_icon_x384.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "maskable",
+    "sizes": "512x512",
+    "src": "img/maskable_icon_x512.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "2730x2730",
+    "src": "img/maskable_icon.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "48x48",
+    "src": "img/maskable_icon_x48.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "72x72",
+    "src": "img/maskable_icon_x72.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "96x96",
+    "src": "img/maskable_icon_x96.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "128x128",
+    "src": "img/maskable_icon_x128.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "192x192",
+    "src": "img/maskable_icon_x192.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "384x384",
+    "src": "img/maskable_icon_x384.png",
+    "type": "image/png"
+  },
+  {
+    "purpose": "any",
+    "sizes": "512x512",
+    "src": "img/maskable_icon_x512.png",
+    "type": "image/png"
+  },
+  {
+   "purpose": "any",
+   "sizes": "2048x2048",
+   "src": "img/icono2048.png",
+   "type": "image/png"
+  }
+ ]
+}
