@@ -10,7 +10,6 @@
     <link rel="icon" sizes="32x32" href="favicon.ico" />
     <link rel="manifest" href="site.webmanifest" />
 
-    <!-- scripts del primer index -->
     <script type="module" src="js/lib/registraServiceWorker.js"></script>
     <script type="module" src="js/lib/manejaErrores.js"></script>
 
@@ -19,7 +18,6 @@
     <script type="module" src="js/lib/custom/md-app-bar.js"></script>
     <script type="module" src="js/nav-tab-fixed.js"></script>
 
-    <!-- estilos del primer index -->
     <link rel="stylesheet" href="css/estilos.css" />
     <link rel="stylesheet" href="css/transicion_pestanas.css" />
     <link rel="stylesheet" href="css/md-tab.css" />
@@ -35,15 +33,8 @@
     </md-app-bar>
 
     <section style="padding: 20px">
-      <menu
-        style="
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-          list-style: none;
-          padding: 0;
-        "
-      >
+      <menu style="display: flex; gap: 10px; flex-wrap: wrap; list-style: none; padding: 0;">
+        
         <li>
           <button id="btnSuscribe" class="md-filled-button" hidden>
             Suscribirse
@@ -77,6 +68,7 @@
             <button class="md-outline-button">Generar llaves</button>
           </a>
         </li>
+
       </menu>
 
       <p>
@@ -100,11 +92,10 @@
       import { calculaDtoParaSuscripcion } from "./js/lib/calculaDtoParaSuscripcion.js";
       import { consume } from "./js/lib/consume.js";
       import { enviaJsonRecibeJson } from "./js/lib/enviaJsonRecibeJson.js";
-      import { descargaVista } from "./js/lib/descargaVista.js";
       import { muestraError } from "./js/lib/muestraError.js";
 
       const applicationServerKey = urlBase64ToUint8Array(
-        "BGYcbx7KbK-vLvCGYTnl_kzmHZMMbs6wqf6HYF_Y4TEJyuQAu_27Yn2tBySI6xM8dlVWc4tXByZj7OGrcSTPZe0",
+        "BGYcbx7KbK-vLvCGYTnl_kzmHZMMbs6wqf6HYF_Y4TEJyuQAu_27Yn2tBySI6xM8dlVWc4tXByZj7OGrcSTPZe0"
       );
 
       const Estado = {
@@ -132,7 +123,7 @@
             const dto = calculaDtoParaSuscripcion(suscripcion);
 
             await consume(
-              enviaJsonRecibeJson("php/suscripcion-modifica.php", dto),
+              enviaJsonRecibeJson("php/suscripcion-modifica.php", dto)
             );
 
             muestraEstado(Estado.SUSCRITO);
@@ -142,8 +133,6 @@
           muestraError(error);
         }
       }
-
-      btnNotifica.addEventListener("click", notificaDesdeElServidor);
 
       async function notificaDesdeElServidor() {
         const mensaje = document.getElementById("txtMensaje").value;
@@ -155,15 +144,14 @@
 
         reporte.innerHTML = `<progress max="100">Cargando…</progress>`;
 
-        await fetch("php/notifica.php", {
+        const resp = await fetch("php/notifica.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            mensaje: mensaje,
-          }),
+          body: JSON.stringify({ mensaje }),
         });
+
         const json = await resp.json();
 
         reporte.innerHTML = json.reporte.innerHTML;
@@ -173,7 +161,6 @@
         muestraEstado(Estado.CALCULANDO);
 
         const suscripcion = await suscribeAPush(applicationServerKey);
-
         const dto = calculaDtoParaSuscripcion(suscripcion);
 
         await consume(enviaJsonRecibeJson("php/suscripcion-modifica.php", dto));
@@ -190,7 +177,7 @@
           const dto = calculaDtoParaSuscripcion(suscripcion);
 
           await consume(
-            enviaJsonRecibeJson("php/suscripcion-elimina.php", dto),
+            enviaJsonRecibeJson("php/suscripcion-elimina.php", dto)
           );
 
           muestraEstado(Estado.DESUSCRITO);
@@ -216,7 +203,7 @@
           btnSuscribe.hidden = false;
           btnCancela.hidden = true;
           btnNotifica.hidden = true;
-          campoMensaje.hidden = true; 
+          campoMensaje.hidden = true;
         }
       }
     </script>
