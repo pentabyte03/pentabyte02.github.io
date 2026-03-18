@@ -12,8 +12,8 @@ use Minishlink\WebPush\WebPush;
 const AUTH = [
  "VAPID" => [
   "subject" => "https://pentabyte02-github-io-1.onrender.com",
-  "publicKey" => "BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0",
-  "privateKey" => "vplfkITvu0cwHqzK9Kj-DYStbCH_9AhGx9LqMyaeI6w"
+  "publicKey" => "BGYcbx7KbK-vLvCGYTnl_kzmHZMMbs6wqf6HYF_Y4TEJyuQAu_27Yn2tBySI6xM8dlVWc4tXByZj7OGrcSTPZe0",
+  "privateKey" => "CtDPC1aZXh8Au8j2QVqvH8OqC6Aj5hSNfJCovfOP764"
  ]
 ];
 
