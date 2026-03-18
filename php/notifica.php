@@ -18,7 +18,14 @@ const AUTH = [
 ];
 
 $webPush = new WebPush(AUTH);
-$mensaje = "Hola! 👋";
+
+$datos = json_decode(file_get_contents("php://input"), true);
+$texto = $datos["mensaje"] ?? "Mensaje vacío";
+
+$mensaje = json_encode([
+    "title" => "Pentabyte 💬",
+    "body" => $texto
+]);
 
 // Envia el mensaje a todas las suscripciones.
 
