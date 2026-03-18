@@ -57,10 +57,12 @@
         </li>
 
         <label
+          id="campoMensaje"
           class="md-filled-text-field"
-          style="width: 100%; margin-bottom: 15px"
+          style="width: 100%; margin-bottom: 10px"
+          hidden
         >
-          <input id="txtMensaje" type="text" placeholder=" " required />
+          <input id="txtMensaje" type="text" placeholder=" " />
           <span>Mensaje para todos 💬</span>
         </label>
 
@@ -141,11 +143,13 @@
         }
       }
 
+      btnNotifica.addEventListener("click", notificaDesdeElServidor);
+
       async function notificaDesdeElServidor() {
         const mensaje = document.getElementById("txtMensaje").value;
 
         if (!mensaje) {
-          alert("Escribe un mensaje we 😡");
+          alert("Escribe un mensaje para enviar a los suscriptores");
           return;
         }
 
@@ -160,6 +164,9 @@
             mensaje: mensaje,
           }),
         });
+        const json = await resp.json();
+
+        reporte.innerHTML = json.reporte.innerHTML;
       }
 
       async function suscribe() {
@@ -193,18 +200,23 @@
       function muestraEstado(estado) {
         outEstado.value = estado;
 
+        const campoMensaje = document.getElementById("campoMensaje");
+
         if (estado === Estado.INCOMPATIBLE || estado === Estado.CALCULANDO) {
           btnSuscribe.hidden = true;
           btnCancela.hidden = true;
           btnNotifica.hidden = true;
+          campoMensaje.hidden = true;
         } else if (estado === Estado.SUSCRITO) {
           btnSuscribe.hidden = true;
           btnCancela.hidden = false;
           btnNotifica.hidden = false;
+          campoMensaje.hidden = false;
         } else if (estado === Estado.DESUSCRITO) {
           btnSuscribe.hidden = false;
           btnCancela.hidden = true;
           btnNotifica.hidden = true;
+          campoMensaje.hidden = true; 
         }
       }
     </script>
