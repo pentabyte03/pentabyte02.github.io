@@ -56,6 +56,14 @@
           </button>
         </li>
 
+        <label
+          class="md-filled-text-field"
+          style="width: 100%; margin-bottom: 15px"
+        >
+          <input id="txtMensaje" type="text" placeholder=" " required />
+          <span>Mensaje para todos 💬</span>
+        </label>
+
         <li>
           <button id="btnNotifica" class="md-filled-button" hidden>
             Enviar notificación
@@ -134,9 +142,24 @@
       }
 
       async function notificaDesdeElServidor() {
+        const mensaje = document.getElementById("txtMensaje").value;
+
+        if (!mensaje) {
+          alert("Escribe un mensaje we 😡");
+          return;
+        }
+
         reporte.innerHTML = `<progress max="100">Cargando…</progress>`;
 
-        await descargaVista("php/notifica.php", "POST");
+        await fetch("php/notifica.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mensaje: mensaje,
+          }),
+        });
       }
 
       async function suscribe() {
